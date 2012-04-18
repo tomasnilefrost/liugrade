@@ -76,14 +76,15 @@ new_course = [course for course in course_dict if course not in old_dict]
 mail_str = ""
 if (len(new_course) != 0):
 	mail_str = "New courses added:\n"
-	for x in new_course:
+	# done alphabetically
+	for x in sorted(new_course):
 		mail_str += format_course(x, course_dict[x])
 		# copy the new courses to the old dict to compare individually
 		old_dict.update({x : course_dict[x]})
 	mail_str += "\n"
 
-# check for changes in the existing courses (for instance added course moments)
-for x in course_dict:
+# check for changes in the existing courses (for instance added course moments), output shall also be sorted
+for x in sorted(course_dict.keys()):
 	if 'course_moments' not in course_dict[x] and 'course_moments' in old_dict[x]:
 		mail_str += "Course " + x + " has been finished...\n"
 		mail_str += format_course(x, course_dict[x])
