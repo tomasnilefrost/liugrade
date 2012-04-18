@@ -1,0 +1,6 @@
+Small utility that crawls studentportalen (http://student.liu.se/portal)
+for changes in the students grades. When a change is recorded an email
+with that information will be sent to the email configured.
+
+Configuration is made in config.py and should be self explanatory.
+The username and password is the username and password to studentportalen
