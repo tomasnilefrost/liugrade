@@ -1,4 +1,6 @@
 import httplib2
+import operator
+import json
 from bs4 import BeautifulSoup
 from urllib import urlencode
 from config import * # pass & pwd variables
@@ -27,18 +29,32 @@ post_data['redirect'] = '1'
 resp, content =  http.request(url, "POST", body=urlencode(post_data))
 
 soup = BeautifulSoup(content).findAll('table')[4] # fifth table
-courseData = []
+course_data = []
 for row in soup.findAll("tr"):
 	col = row.findAll("td")
 	if (len(col) == 5):
 		if col[0].findAll('b'): # a course is bold
-			data = {'course_code' : strip_content(col[0].findAll('b')[0]), 'course' : strip_content(col[1]), 'points' : strip_content(col[2]), 'grade' : strip_content(col[3]), 'date' : strip_content(col[4])}#, 'course_moments' : {}}
-			courseData.append(data)
+			data = {'course_code' : strip_content(col[0].findAll('b')[0]), 'course' : strip_content(col[1]), 'points' : strip_content(col[2]), 'grade' : strip_content(col[3]), 'date' : strip_content(col[4])}
+			course_data.append(data)
 		else: # otherwise its a course moment
 			key = strip_content(col[0]) 
-			if ('course_moments' not in courseData[-1]):
-				courseData[-1].update({'course_moments' : { } })
+			if ('course_moments' not in course_data[-1]):
+				course_data[-1].update({'course_moments' : { } })
 			data = {'points' : strip_content(col[2]), 'grade' : strip_content(col[3]), 'date' : strip_content(col[4])}
-			courseData[-1]['course_moments'][key] = data
+			course_data[-1]['course_moments'][key] = data
 
-print courseData
+print course_data
+print "\n\n\n"
+
+course_data.sort(key=operator.itemgetter('course_code'))
+print course_data
+
+
+js = json.dumps(course_data)
+f = open('json_dump', 'r')
+old_data = f.read()
+f.close()
+if (old_data != js):
+	print "The data differs..."
+	f = open('json_dump', 'w')
+	f.write(js)
