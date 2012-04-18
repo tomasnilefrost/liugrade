@@ -15,10 +15,10 @@ def strip_content(elem):
 	return stripped
 
 def format_course(code, info):
-	output_string = code + ": " + info['course'] + " grade: " + info['grade'] + " points: " + info['points'] + " date: " + info['date'] + "\n"
+	output_string = code + ": " + info['course'] + ", grade: " + info['grade'] + ", points: " + info['points'] + ", date: " + info['date'] + "\n"
 	if 'course_moments' in info:
 		for key in info['course_moments']:
-			output_string += "\t" + key + " grade: " + info['course_moments'][key]['grade'] + " points: " + info['course_moments'][key]['points'] + " date: " + info['course_moments'][key]['date'] + "\n"
+			output_string += "\t" + key + ", grade: " + info['course_moments'][key]['grade'] + ", points: " + info['course_moments'][key]['points'] + ", date: " + info['course_moments'][key]['date'] + "\n"
 	return output_string
 
 old_dict = {}
@@ -44,7 +44,6 @@ for field in BeautifulSoup(content).findAll('input'):
 
 post_data['user'] = config_username
 post_data['pass'] = config_password
-
 post_data['redirect_url'] = '/portal/sv/portal/studieresultat/'
 post_data['redirect'] = '1'
 
