@@ -27,12 +27,12 @@ try:
 	old_dict = json.loads(content)
 	f.close()
 except:
+	# we will simply compare with an empty dictionary of the "old" courses
 	pass
-	# we will send mail about all the course
-#	print "Couldn't open old dictionary"
 
 
-http = httplib2.Http()
+# Bad practice, should add the certificate to use validation
+http = httplib2.Http(disable_ssl_certificate_validation=True)
 url = 'https://www3.student.liu.se/portal/login'
 resp, content = http.request(url)
 post_data = {}
