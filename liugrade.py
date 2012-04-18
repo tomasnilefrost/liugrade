@@ -1,6 +1,7 @@
 import httplib2
 from bs4 import BeautifulSoup
 from urllib import urlencode
+from config import * # pass & pwd variables
 
 def strip_content(elem):
 	stripped = elem.renderContents().strip()
@@ -17,8 +18,8 @@ for field in BeautifulSoup(content).findAll('input'):
 		post_data[field['name']] = field['value']
 
 
-post_data['user'] = ''
-post_data['pass'] = ''
+post_data['user'] = config_username
+post_data['pass'] = config_password
 
 post_data['redirect_url'] = '/portal/sv/portal/studieresultat/'
 post_data['redirect'] = '1'
@@ -41,7 +42,3 @@ for row in soup.findAll("tr"):
 			courseData[-1]['course_moments'][key] = data
 
 print courseData
-
-
-
-
