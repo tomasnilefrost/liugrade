@@ -2,6 +2,12 @@ import httplib2
 from bs4 import BeautifulSoup
 from urllib import urlencode
 
+def strip_content(elem):
+	stripped = elem.renderContents().strip()
+	stripped = stripped.replace('*', '')
+	stripped = stripped.replace('\xc2\xa0', '')
+	return stripped
+
 http = httplib2.Http()
 url = 'https://www3.student.liu.se/portal/login'
 resp, content = http.request(url)
@@ -24,15 +30,18 @@ courseData = []
 for row in soup.findAll("tr"):
 	col = row.findAll("td")
 	if (len(col) == 5):
-		if col[0].findAll('b'): # a completed course is bold
-			data = {'course_code' : col[0].findAll('b')[0].renderContents().strip().replace('*', ''), 'course' : col[1].renderContents().strip(), 'points' : col[2].renderContents().strip(), 'grade' : col[3].renderContents().strip(), 'date' : col[4].renderContents().strip(), 'course_moments' : {}}
+		if col[0].findAll('b'): # a course is bold
+			data = {'course_code' : strip_content(col[0].findAll('b')[0]), 'course' : strip_content(col[1]), 'points' : strip_content(col[2]), 'grade' : strip_content(col[3]), 'date' : strip_content(col[4])}#, 'course_moments' : {}}
 			courseData.append(data)
-		else:
-			key = col[0].renderContents().strip().replace('\xc2\xa0', '') # a course moment starts with two white spaces
-			data = {'points' : col[2].renderContents().strip(), 'grade' : col[3].renderContents().strip(), 'date' : col[4].renderContents().strip()}
+		else: # otherwise its a course moment
+			key = strip_content(col[0]) 
+			if ('course_moments' not in courseData[-1]):
+				courseData[-1].update({'course_moments' : { } })
+			data = {'points' : strip_content(col[2]), 'grade' : strip_content(col[3]), 'date' : strip_content(col[4])}
 			courseData[-1]['course_moments'][key] = data
 
 print courseData
+
 
 
 
