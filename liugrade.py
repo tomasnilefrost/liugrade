@@ -27,6 +27,7 @@ try:
 	old_dict = json.loads(content)
 	f.close()
 except:
+	pass
 	# we will send mail about all the course
 #	print "Couldn't open old dictionary"
 
