@@ -55,6 +55,8 @@ for row in soup.findAll("tr"):
 	col = row.findAll("td")
 	if (len(col) % 5 == 0):
 		if col[0].findAll('b'): # a course is bold
+			if (strip_content(col[0]).find("Betyg") >= 0): 
+				continue
 			data = { 'key' : strip_content(col[0].findAll('b')[0]), 'data' : {} }
 			data['data'] = {'course' : strip_content(col[1]), 'points' : strip_content(col[2]), 'grade' : strip_content(col[3]), 'date' : strip_content(col[4])}
 			course_data.append(data)
