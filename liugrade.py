@@ -53,7 +53,7 @@ soup = BeautifulSoup(content).findAll('table')[4] # fifth table
 course_data = []
 for row in soup.findAll("tr"):
 	col = row.findAll("td")
-	if (len(col) == 5):
+	if (len(col) % 5 == 0):
 		if col[0].findAll('b'): # a course is bold
 			data = { 'key' : strip_content(col[0].findAll('b')[0]), 'data' : {} }
 			data['data'] = {'course' : strip_content(col[1]), 'points' : strip_content(col[2]), 'grade' : strip_content(col[3]), 'date' : strip_content(col[4])}
