@@ -4,3 +4,5 @@ with that information will be sent to the email configured.
 
 Configuration is made in config.py and should be self explanatory.
 The username and password is the username and password to studentportalen
+
+Uses httplib2-0.7.4 and Beautiful Soup 4.0.4
