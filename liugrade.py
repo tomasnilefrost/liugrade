@@ -7,6 +7,7 @@ from urllib import urlencode
 from config import * # pass & pwd variables and so on
 import smtplib
 import string
+import sys
 
 def strip_content(elem):
 	stripped = elem.renderContents().strip()
@@ -35,7 +36,11 @@ except:
 # Bad practice, should add the certificate to use validation
 http = httplib2.Http(disable_ssl_certificate_validation=True)
 url = 'https://www3.student.liu.se/portal/login'
-resp, content = http.request(url)
+try:
+	resp, content = http.request(url)
+except:
+	# fail, studentportalen is not always accessible...
+	sys.exit(1)
 post_data = {}
 for field in BeautifulSoup(content).findAll('input'):
 	if field.has_key('name'):
@@ -47,7 +52,11 @@ post_data['pass'] = config_password
 post_data['redirect_url'] = '/portal/sv/portal/studieresultat/'
 post_data['redirect'] = '1'
 
-resp, content =  http.request(url, "POST", body=urlencode(post_data))
+try:
+	resp, content =  http.request(url, "POST", body=urlencode(post_data))
+except:
+	# fail, studentportalen is not always accessible...
+	sys.exit(1)
 
 soup = BeautifulSoup(content).findAll('table')[4] # fifth table
 course_data = []
